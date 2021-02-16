@@ -1,16 +1,19 @@
 import React, { useState } from "react";
 import axios from "axios";
+import classnames from "classnames";
 // import logo from "../../images/Moviemaniac1.jpg";
 
 function Login() {
   const [field, setField] = useState({
     email: "",
     password: "",
+    errors: {},
   });
 
   const [finalField, setFinalField] = useState({
     email: "",
     password: "",
+    errors: {},
   });
 
   function changing(event) {
@@ -30,50 +33,55 @@ function Login() {
     setFinalField({
       email: field.email,
       password: field.password,
+      errors: field.errors,
     });
 
     axios
       .post("/users/login", finalField)
       .then((res) => console.log(res.data))
-      .catch((err) => console.log(err.response.data));
+      .catch((err) => setFinalField({ errors: err.response.data }));
   }
+
+  const { errors } = finalField;
 
   return (
     // <body className="text-center">
     <div className="text-center">
-      <form className="form-signin" onSubmit={submit}>
+      <form noValidate className="form-signin" onSubmit={submit}>
         <img className="mb-4" alt="" width="72" height="72" />
 
         <h1 className="h3 mb-3 font-weight-normal">Please sign in</h1>
-
-        <label htmlFor="inputEmail" className="sr-only">
-          Email address
-        </label>
 
         <input
           name="email"
           type="email"
           id="inputEmail"
-          className="form-control"
+          className={classnames("form-control", {
+            "is-invalid": errors.email,
+          })}
           placeholder="Email address"
           onChange={changing}
           value={field.email}
           autoFocus
         />
 
-        <label htmlFor="inputPassword" className="sr-only">
-          Password
-        </label>
+        {errors.email && <div className="invalid-feedback">{errors.email}</div>}
 
         <input
           name="password"
           type="password"
           id="inputPassword"
-          className="form-control"
+          className={classnames("form-control", {
+            "is-invalid": errors.password,
+          })}
           placeholder="Password"
           onChange={changing}
           value={field.password}
         />
+
+        {errors.password && (
+          <div className="invalid-feedback">{errors.password}</div>
+        )}
 
         <button className="btn btn-lg btn-primary btn-block" type="submit">
           Sign in
