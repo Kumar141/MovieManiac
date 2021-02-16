@@ -1,12 +1,15 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 function Navbar() {
   return (
     <nav className="navbar navbar-expand-sm navbar-dark bg-dark mb-4">
       <div className="container">
-        <a className="navbar-brand" href="landing.html">
-          DevConnector
-        </a>
+        <Link className="navbar-brand" to="/">
+          {/* <i class="fas fa-file-video"></i> */}
+          <img src="../../images/Moviemaniac4.jpg" alt="" />
+          MovieManiac
+        </Link>
         <button
           className="navbar-toggler"
           type="button"
@@ -17,25 +20,16 @@ function Navbar() {
         </button>
 
         <div className="collapse navbar-collapse" id="mobile-nav">
-          <ul className="navbar-nav mr-auto">
-            <li className="nav-item">
-              <a className="nav-link" href="profiles.html">
-                {" "}
-                Developers
-              </a>
-            </li>
-          </ul>
-
           <ul className="navbar-nav ml-auto">
             <li className="nav-item">
-              <a className="nav-link" href="register.html">
+              <Link className="nav-link" to="/register">
                 Sign Up
-              </a>
+              </Link>
             </li>
             <li className="nav-item">
-              <a className="nav-link" href="login.html">
+              <Link className="nav-link" to="/login">
                 Login
-              </a>
+              </Link>
             </li>
           </ul>
         </div>
@@ -43,3 +37,5 @@ function Navbar() {
     </nav>
   );
 }
+
+export default Navbar;
