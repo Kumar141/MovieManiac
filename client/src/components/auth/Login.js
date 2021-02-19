@@ -1,25 +1,35 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
+import PropTypes from "prop-types";
+import { connect } from "react-redux";
 import classnames from "classnames";
-// import logo from "../../images/Moviemaniac1.jpg";
+import { loginUser } from "../../actions/authActions";
 
-function Login() {
-  const [field, setField] = useState({
+import logo from "../../images/Moviemaniac1.jpg";
+
+function Login(props) {
+  const [fields, setFields] = useState({
     email: "",
     password: "",
     errors: {},
   });
 
-  const [finalField, setFinalField] = useState({
-    email: "",
-    password: "",
-    errors: {},
+  // useEffect(() => {
+  //   if (props.errors) {
+  //     setFields({ errors: props.errors });
+  //   }
+  // }, [props.errors]);
+
+  useEffect(() => {
+    if (props.auth.isAuthenticated) {
+      props.history.push("/posts");
+    }
   });
 
   function changing(event) {
     const { name, value } = event.target;
 
-    setField((prevValue) => {
+    setFields((prevValue) => {
       return {
         ...prevValue,
         [name]: value,
@@ -30,25 +40,18 @@ function Login() {
   function submit(event) {
     event.preventDefault();
 
-    setFinalField({
-      email: field.email,
-      password: field.password,
-      errors: field.errors,
-    });
+    console.log(fields);
 
-    axios
-      .post("/users/login", finalField)
-      .then((res) => console.log(res.data))
-      .catch((err) => setFinalField({ errors: err.response.data }));
+    props.loginUser(fields);
   }
 
-  const { errors } = finalField;
+  const { errors } = fields;
 
   return (
     // <body className="text-center">
     <div className="text-center">
       <form noValidate className="form-signin" onSubmit={submit}>
-        <img className="mb-4" alt="" width="72" height="72" />
+        <img className="mb-4" src={logo} alt="" width="72" height="72" />
 
         <h1 className="h3 mb-3 font-weight-normal">Please sign in</h1>
 
@@ -61,7 +64,7 @@ function Login() {
           })}
           placeholder="Email address"
           onChange={changing}
-          value={field.email}
+          value={fields.email}
           autoFocus
         />
 
@@ -76,7 +79,7 @@ function Login() {
           })}
           placeholder="Password"
           onChange={changing}
-          value={field.password}
+          value={fields.password}
         />
 
         {errors.password && (
@@ -93,4 +96,15 @@ function Login() {
   );
 }
 
-export default Login;
+Login.propTypes = {
+  loginUser: PropTypes.func.isRequired,
+  auth: PropTypes.object.isRequired,
+  errors: PropTypes.object.isRequired,
+};
+
+const mapStateToProps = (state) => ({
+  auth: state.auth,
+  errors: state.errors,
+});
+
+export default connect(mapStateToProps, { loginUser })(Login);
