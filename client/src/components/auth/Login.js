@@ -6,23 +6,26 @@ import classnames from "classnames";
 import { loginUser } from "../../actions/authActions";
 
 import logo from "../../images/Moviemaniac1.jpg";
+import TextFieldGroup from "../common/TextFieldGroup";
 
 function Login(props) {
   const [fields, setFields] = useState({
     email: "",
     password: "",
-    errors: {},
+    // errors: {},
   });
 
-  // useEffect(() => {
-  //   if (props.errors) {
-  //     setFields({ errors: props.errors });
-  //   }
-  // }, [props.errors]);
+  const [error, setErrors] = useState({ errors: {} });
+
+  useEffect(() => {
+    if (props.errors) {
+      setErrors({ errors: props.errors });
+    }
+  }, [props.errors]);
 
   useEffect(() => {
     if (props.auth.isAuthenticated) {
-      props.history.push("/posts");
+      props.history.push("/dashboard");
     }
   });
 
@@ -45,53 +48,49 @@ function Login(props) {
     props.loginUser(fields);
   }
 
-  const { errors } = fields;
+  const { errors } = error;
 
   return (
     // <body className="text-center">
-    <div className="text-center">
-      <form noValidate className="form-signin" onSubmit={submit}>
-        <img className="mb-4" src={logo} alt="" width="72" height="72" />
+    // <div className="text-center">
+    //   <img className="mb-4" src={logo} alt="" width="72" height="72" />
+    //   <h1 className="h3 mb-3 font-weight-normal">Please sign in</h1>
 
-        <h1 className="h3 mb-3 font-weight-normal">Please sign in</h1>
+    <div className="register">
+      <div className="container">
+        <div className="row">
+          <div className="col-md-8 m-auto">
+            <h1 className="display-4 text-center">Sign In</h1>
 
-        <input
-          name="email"
-          type="email"
-          id="inputEmail"
-          className={classnames("form-control", {
-            "is-invalid": errors.email,
-          })}
-          placeholder="Email address"
-          onChange={changing}
-          value={fields.email}
-          autoFocus
-        />
+            <form noValidate className="form-signin" onSubmit={submit}>
+              <TextFieldGroup
+                name="email"
+                type="email"
+                id="inputEmail"
+                placeholder="Email Address"
+                value={fields.email}
+                fieldErrors={errors.email}
+                onChange={changing}
+              />
 
-        {errors.email && <div className="invalid-feedback">{errors.email}</div>}
+              <TextFieldGroup
+                name="password"
+                type="password"
+                id="inputPassword"
+                placeholder="Password"
+                value={fields.password}
+                fieldErrors={errors.password}
+                onChange={changing}
+              />
 
-        <input
-          name="password"
-          type="password"
-          id="inputPassword"
-          className={classnames("form-control", {
-            "is-invalid": errors.password,
-          })}
-          placeholder="Password"
-          onChange={changing}
-          value={fields.password}
-        />
-
-        {errors.password && (
-          <div className="invalid-feedback">{errors.password}</div>
-        )}
-
-        <button className="btn btn-lg btn-primary btn-block" type="submit">
-          Sign in
-        </button>
-      </form>
-      <p className="mt-5 mb-3 text-muted">&copy; 2017-2020</p>
-      {/* // </body> */}
+              <button className="w-100 bt btn btn-lg btn-info" type="submit">
+                Log In!
+              </button>
+            </form>
+            {/* <p className="mt-5 mb-3 text-muted">&copy; 2017-2021</p> */}
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

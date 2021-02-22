@@ -6,6 +6,7 @@ import { connect } from "react-redux";
 import { registerUser } from "../../actions/authActions";
 
 import logo from "../../images/Moviemaniac1.jpg";
+import TextFieldGroup from "../common/TextFieldGroup";
 
 function Register(props) {
   const [fields, setFields] = useState({
@@ -13,14 +14,10 @@ function Register(props) {
     email: "",
     password: "",
     password2: "",
-    errors: {},
+    // errors: {},
   });
 
-  useEffect(() => {
-    if (props.errors) {
-      setFields({ errors: props.errors });
-    }
-  }, [props.errors]);
+  const [error, setErrors] = useState({ errors: {} });
 
   function changing(event) {
     const { name, value } = event.target;
@@ -33,93 +30,93 @@ function Register(props) {
     });
   }
 
+  useEffect(() => {
+    if (props.auth.isAuthenticated) {
+      props.history.push("/dashboard");
+    }
+  });
+
+  useEffect(() => {
+    if (props.errors) {
+      setErrors({ errors: props.errors });
+    }
+  }, [props.errors]);
+
   function submit(event) {
     event.preventDefault();
-
+    console.log(fields);
     //registerUser is an action.
     props.registerUser(fields, props.history); //committed an action to register user and sends data (see authActions.js)
   }
 
-  const { errors } = fields;
+  const { errors } = error;
 
   //Grabbed the user from auth prop which we've declared at line 147.
   // const { user } = props.auth;
 
   return (
-    // <body className="text-center">
-    // <main className="form-signin">
+    /*     <body className="text-center">
+    <main className="form-signin">
 
     <div className="text-center form-signin">
       <form onSubmit={submit}>
-        <img className="mb-4" src={logo} alt="" width="72" height="72" />
 
         <h1 className="h3 mb-3 fw-normal">Sign Up</h1>
+    <img className="mb-4" src={logo} alt="" width="72" height="72" /> */
 
-        <input
-          name="name"
-          type="text"
-          className={classnames("form-control top", {
-            "is-invalid": errors.name,
-          })}
-          placeholder="Name"
-          onChange={changing}
-          value={fields.name}
-          autoFocus
-        />
+    <div className="register">
+      <div className="container">
+        <div className="row">
+          <div className="col-md-8 m-auto">
+            <h1 className="display-4 text-center">Sign Up</h1>
+            <p className="lead text-center">Create your MovieManiac account</p>
 
-        {errors.name && <div className="invalid-feedback">{errors.name}</div>}
+            <form noValidate onSubmit={submit}>
+              <TextFieldGroup
+                name="name"
+                type="name"
+                placeholder="Name"
+                value={fields.name}
+                fieldErrors={errors.name}
+                onChange={changing}
+                autofocus
+              />
 
-        <input
-          name="email"
-          type="email"
-          className={classnames("form-control bottom", {
-            "is-invalid": errors.email,
-          })}
-          placeholder="Email"
-          onChange={changing}
-          value={fields.email}
-        />
+              <TextFieldGroup
+                name="email"
+                type="email"
+                placeholder="Email"
+                value={fields.email}
+                fieldErrors={errors.email}
+                onChange={changing}
+              />
 
-        {errors.email && <div className="invalid-feedback">{errors.email}</div>}
+              <TextFieldGroup
+                name="password"
+                type="password"
+                id="inputPassword"
+                placeholder="Password"
+                value={fields.password}
+                fieldErrors={errors.password}
+                onChange={changing}
+              />
 
-        <input
-          name="password"
-          type="password"
-          className={classnames("form-control bottom", {
-            "is-invalid": errors.password,
-          })}
-          placeholder="Password"
-          onChange={changing}
-          value={fields.password}
-        />
-
-        {errors.password && (
-          <div className="invalid-feedback">{errors.password}</div>
-        )}
-
-        <input
-          name="password2"
-          type="password"
-          className={classnames("form-control bottom", {
-            "is-invalid": errors.password2,
-          })}
-          placeholder="Enter Password again"
-          onChange={changing}
-          value={fields.password2}
-        />
-
-        {errors.password2 && (
-          <div className="invalid-feedback">{errors.password2}</div>
-        )}
-
-        <button className="w-100 btn btn-lg btn-primary" type="submit">
-          Sign me UP!
-        </button>
-
-        {/* <p className="mt-5 mb-3 text-muted copy">&copy; MovieManiac</p> */}
-      </form>
-      {/* </main> */}
-      {/* // </body> */}
+              <TextFieldGroup
+                name="password2"
+                type="password"
+                id="inputPassword"
+                placeholder="Enter Password again"
+                value={fields.password2}
+                fieldErrors={errors.password2}
+                onChange={changing}
+              />
+              <button className="w-100 bt btn btn-lg btn-info" type="submit">
+                Sign me UP!
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

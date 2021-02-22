@@ -36,16 +36,16 @@ router.post("/register", (req, res) => {
       errors.email = "Email already exists";
       return res.status(400).json(errors);
     } else {
-      // const avatar = gravatar.url(req.body.email, {
-      //   s: "200", //size
-      //   r: "pg", //rating
-      //   d: "mm", //default
-      // });
+      const avatar = gravatar.url(req.body.email, {
+        s: "200", //size
+        r: "pg", //rating
+        d: "mm", //default
+      });
 
       const newUser = new User({
         name: req.body.name,
         email: req.body.email,
-        // avatar,
+        avatar,
         password: req.body.password,
       });
 
@@ -92,15 +92,15 @@ router.post("/login", (req, res) => {
           if (isMatch) {
             const payload = {
               id: user.id,
+              name: user.name,
               email: user.email,
+              avatar: user.avatar,
             };
 
             jwt.sign(
               payload,
               keys.secretOrKey,
-              {
-                expiresIn: 3600,
-              },
+              { expiresIn: 3600 },
               (err, token) => {
                 res.json({
                   success: true,
