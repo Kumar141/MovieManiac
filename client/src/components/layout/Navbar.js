@@ -3,22 +3,30 @@ import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { logoutUser } from "../../actions/authActions";
+import { clearCurrentProfile } from "../../actions/profileActions";
 
 function Navbar(props) {
   const { isAuthenticated, user } = props.auth;
 
   function onLogoutClick(event) {
     event.preventDefault();
+    props.clearCurrentProfile();
     props.logoutUser();
   }
 
   const authLinks = (
-    <ul className="navbar-nav ml-auto">
+    <ul className="navbar-nav ml-auto side">
+      <li className="nav-item">
+        <Link className="nav-link" to="/createpost">
+          <i class="fas fa-plus"></i>
+          Create-Post
+        </Link>
+      </li>
       <li className="nav-item">
         <a href="#" onClick={onLogoutClick} className="nav-link">
           <img
             className="rounded-circle"
-            style={{ width: "25px", marginRight: "5px" }}
+            style={{ width: "25px", marginRight: "10px", marginLeft: "40px" }}
             src={user.avatar}
             alt={user.name}
           />
@@ -29,7 +37,7 @@ function Navbar(props) {
   );
 
   const guestLinks = (
-    <ul className="navbar-nav ml-auto">
+    <ul className="navbar-nav ml-auto side">
       <li className="nav-item">
         <Link className="nav-link" to="/register">
           Sign Up
@@ -47,8 +55,9 @@ function Navbar(props) {
     <nav className="navbar navbar-expand-sm navbar-dark bg-dark mb-4">
       <div className="container">
         <Link className="navbar-brand" to="/">
-          {/* <i class="fas fa-file-video"></i> */}
           <img src="" alt="" />
+          <i class="fas fa-file-video"></i>
+          {/* <i class="fas fa-video"></i> */}
           MovieManiac
         </Link>
         <button
@@ -77,4 +86,6 @@ const mapStateToProps = (state) => ({
   auth: state.auth,
 });
 
-export default connect(mapStateToProps, { logoutUser })(Navbar);
+export default connect(mapStateToProps, { logoutUser, clearCurrentProfile })(
+  Navbar
+);

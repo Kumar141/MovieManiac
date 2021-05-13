@@ -1,11 +1,9 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import classnames from "classnames";
 import { loginUser } from "../../actions/authActions";
 
-import logo from "../../images/Moviemaniac1.jpg";
+// import logo from "../../images/Moviemaniac1.jpg";
 import TextFieldGroup from "../common/TextFieldGroup";
 
 function Login(props) {
@@ -18,16 +16,16 @@ function Login(props) {
   const [error, setErrors] = useState({ errors: {} });
 
   useEffect(() => {
-    if (props.errors) {
-      setErrors({ errors: props.errors });
-    }
-  }, [props.errors]);
-
-  useEffect(() => {
     if (props.auth.isAuthenticated) {
       props.history.push("/dashboard");
     }
   });
+
+  useEffect(() => {
+    if (props.errors) {
+      setErrors({ errors: props.errors });
+    }
+  }, [props.errors]);
 
   function changing(event) {
     const { name, value } = event.target;

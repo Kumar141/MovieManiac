@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import { withRouter } from "react-router-dom";
-import classnames from "classnames";
 import { connect } from "react-redux";
 import { registerUser } from "../../actions/authActions";
 
-import logo from "../../images/Moviemaniac1.jpg";
+// import classnames from "classnames";
+// import logo from "../../images/Moviemaniac1.jpg";
 import TextFieldGroup from "../common/TextFieldGroup";
 
 function Register(props) {
